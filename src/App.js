@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
-// Import context
-import { ThemeContext } from './components/Contexts/ThemeContext';
-
 // Import components
 import Navbar from './components/Navbar/Navbar';
 import StyledNumberInput from './components/Inputs/StyledNumberInput';
+import StyledDateInput from './components/Inputs/StyledDateInput';
 import { GlobalStyles } from './components/Theme/GlobalStyles';
 import { lightTheme, darkTheme } from './components/Theme/Themes';
+import { ThemeContext } from './components/Contexts/ThemeContext';
 
 const Header = styled.h1`
   color: ${({ theme }) => theme === 'light' ? `#757E95` : `white`};
@@ -23,13 +22,13 @@ const BookingContainer = styled.div`
   border: none;
   transition: all 0.50s linear;
   display: flex;
+  flex-direction: column;
+  gap: 20px;
   max-width: 700px; 
   height: 300px;
   margin-left: auto;
   margin-right: auto;
 `
-
-
 
 const App = () => {
   // NOTES:
@@ -40,6 +39,7 @@ const App = () => {
 
   const [theme, setTheme] = useState('light');
   const [currentTheme, setCurrentTheme] = useState('light');
+  const [date, setDate] = useState(new Date());
 
   // Light and dark theme state toggler
   const toggleTheme = () => {
@@ -61,6 +61,7 @@ const App = () => {
           <BookingContainer theme={theme}>
             {/* <SunkenHoursInput theme={theme} /> */}
             <StyledNumberInput />
+            <StyledDateInput date={date} setDate={setDate}/>
           </BookingContainer>
 
         </div>

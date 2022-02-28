@@ -6,6 +6,7 @@
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
     "@mantine/core": "^3.6.11",
+    "@mantine/dates": "^3.6.11",
     "@mantine/hooks": "^3.6.11",
     "@mui/icons-material": "^5.4.2",
     "@mui/material": "^5.4.3",
