@@ -32,7 +32,7 @@ const BookingContainer = styled.div`
   flex-direction: column;
   gap: 20px;
   max-width: 700px; 
-  height: 300px;
+  height: ${({ calculated }) => calculated ? `450px` : `300px`};
   margin-left: auto;
   margin-right: auto;
 `
@@ -48,6 +48,27 @@ const ButtonsContainer = styled.div`
   margin-top: 20px;
   margin-left: auto;
   margin-right: auto;
+`
+
+// Container to hold the calculated price and display
+const PriceContainer = styled.div`
+  // background-color: blue;
+  text-align: center;
+  margin-top: 10px;
+  height: 100%;
+  ${({ visible }) => visible ? 
+    `
+      visibility: visible;
+      transition: opacity 2s ease;
+    `
+    :
+    `
+      visibility: hidden;
+      transition: opacity 2s ease;
+      opacity: 0;
+    `
+  }
+
 `
 
 // Styling for "Clear" and "Check Price" buttons
@@ -84,7 +105,7 @@ const App = () => {
   const [openError, setOpenError] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
 
-  // Set initial states for inputs
+  // Input and error states
   const [hours, setHours] = useState();
   const [date, setDate] = useState();
   const [time, setTime] = useState();
@@ -92,6 +113,10 @@ const App = () => {
   const [dateError, setDateError] = useState(false);
   const [timeError, setTimeError] = useState(false);
 
+  // Calculation/price states and variables
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [calculated, setCalculated] = useState(false);
   const [price, setPrice] = useState(0);
 
 
@@ -119,18 +144,21 @@ const App = () => {
     setOpenError(false);
   };
 
-  // Function to clear user inputs
+  // Function to clear user inputs and application states
   const clear = () => {
     // Clear input states
     setHours();
-    setDate();
+    setDate(null);
     setTime();
 
-    // Set input error and snackbar states
+    // Reset other application states
     setHoursError(false);
     setDateError(false);
     setTimeError(false);
     setOpenError(false);
+    setCalculated(false);
+
+    // Open information snackbar
     setOpenInfo(true);
   }
 
@@ -141,6 +169,8 @@ const App = () => {
     setHoursError(false);
     setDateError(false);
     setTimeError(false);
+    setOpenError(false);
+    setOpenInfo(false);
 
     // Check for missing booking hours
     if(!hours){
@@ -180,10 +210,11 @@ const App = () => {
         }
       }
 
-      console.log("START: " + dayjs(date).add(dayjs(time).hour(), 'hour').toDate())
-      console.log("END: " + dayjs(date).add(dayjs(time).hour(), 'hour').add(hours, 'hour').toDate());
-      console.log("TOTAL PRICE: " + totalPrice);
-  
+      // Set states for rendering
+      setStartDate(dayjs(date).add(dayjs(time).hour(), 'hour').format('MMMM D, YYYY h:mm A'));
+      setEndDate(dayjs(date).add(dayjs(time).hour(), 'hour').add(hours, 'hour').format('MMMM D, YYYY h:mm A'));
+      setPrice(totalPrice);
+      setCalculated(true);
     }
     // Missing values, error
     else{
@@ -204,10 +235,18 @@ const App = () => {
           <p style={{ textAlign: 'center' }}><span style={{ fontWeight: 'bold' }}>Saturday - Sunday:</span> $150 per hour</p>
           <p style={{ textAlign: 'center' }}>Maximum booking of two weeks (336 hours)</p>
 
-          <BookingContainer theme={theme}>
+          <BookingContainer theme={theme} calculated={calculated}>
             <StyledHoursInput hours={hours} setHours={setHours} error={hoursError} setError={setHoursError} />
             <StyledDateInput date={date} setDate={setDate} error={dateError} setError={setDateError}/>
             <StyledTimeInput time={time} setTime={setTime} error={timeError} setError={setTimeError}/>
+
+            <PriceContainer visible={calculated}>
+              <hr style={{ width: '75%' }}/>
+              <p style={{ fontSize: 18, fontWeight: 'bold' }}>Booking Pricing</p>
+              <p style={{fontWeight: 'bold'}}>{startDate.toString()} - {endDate.toString()}</p>
+              <p style={{fontWeight: 'bold'}}>Total Price: ${price}</p>
+            </PriceContainer>
+
           </BookingContainer>
           
           <ButtonsContainer>
