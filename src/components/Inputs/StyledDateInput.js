@@ -3,8 +3,14 @@ import { DatePicker } from '@mantine/dates';
 import { ThemeContext } from '../Contexts/ThemeContext';
 import dayjs from 'dayjs';
 
-const StyledDateInput = ({ date, setDate, error }) => {
+const StyledDateInput = ({ date, setDate, error, setError }) => {
     const { currentTheme } = useContext(ThemeContext);
+
+    // On change handler
+    const onChange = (val) => {
+        setDate(val);
+        setError(false);
+    }
 
     return(
         <DatePicker
@@ -34,7 +40,7 @@ const StyledDateInput = ({ date, setDate, error }) => {
             maxDate={dayjs(new Date()).endOf('year').toDate()}
             error={error}
             value={date}
-            onChange={setDate}
+            onChange={(val) => onChange(val)}
             label='Date of Booking'
             placeholder='Choose date'
             required

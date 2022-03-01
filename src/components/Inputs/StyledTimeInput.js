@@ -2,8 +2,14 @@ import { useContext } from 'react';
 import { TimeInput } from "@mantine/dates";
 import { ThemeContext } from '../Contexts/ThemeContext';
 
-const StyledTimeInput = ({ time, setTime, error }) => {
+const StyledTimeInput = ({ time, setTime, error, setError }) => {
     const { currentTheme } = useContext(ThemeContext);
+
+    // On change handler
+    const onChange = (val) => {
+        setTime(val);
+        setError(false);
+    }
 
     return(
         <TimeInput 
@@ -30,7 +36,7 @@ const StyledTimeInput = ({ time, setTime, error }) => {
             }}
             value={time}
             error={error}
-            onChange={setTime}
+            onChange={(val) => onChange(val)}
             label='Time of Booking'
             format='12'
             required

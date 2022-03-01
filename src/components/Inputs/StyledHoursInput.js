@@ -2,8 +2,15 @@ import { useContext } from 'react';
 import { NumberInput } from '@mantine/core';
 import { ThemeContext } from '../Contexts/ThemeContext';
 
-const StyledHoursInput = ({ hours, setHours, error }) => {
+const StyledHoursInput = ({ hours, setHours, error, setError }) => {
     const { currentTheme } = useContext(ThemeContext);
+
+    // On change handler
+    const onChange = (val) => {
+        setHours(val);
+        setError(false);
+    }
+
     return(
         <NumberInput
             styles={{
@@ -38,7 +45,7 @@ const StyledHoursInput = ({ hours, setHours, error }) => {
             }}
             value={hours}
             error={error}
-            onChange={(val) => setHours(val)}
+            onChange={(val) => onChange(val)}
             placeholder='Hours'
             label='Hours for booking'
             min={0}

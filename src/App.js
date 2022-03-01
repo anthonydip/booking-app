@@ -118,46 +118,57 @@ const App = () => {
 
   // Function to clear user inputs
   const clear = () => {
+    // Clear input states
     setHours();
     setDate(null);
     setTime();
 
+    // Set input error and snackbar states
+    setHoursError(false);
+    setDateError(false);
+    setTimeError(false);
+    setOpenError(false);
     setOpenInfo(true);
   }
 
   // Function to calculate the price of the booking
   const checkPrice = () => {
+    // Define valid boolean and reset error states
     var valid = true;
+    setHoursError(false);
+    setDateError(false);
+    setTimeError(false);
 
     // Check for missing booking hours
     if(!hours){
-      console.log("missing hours");
+      setHoursError(true);
       valid = false;
     }
 
     // Check for missing booking date
     if(!date){
-      console.log("missing date");
+      setDateError(true);
       valid = false;
     }
 
     // Check for missing booking time
     if(!time){
-      console.log("missing time");
+      setTimeError(true);
       valid = false;
     }
 
+    // Calculate booking prices if valid
     if(valid){
-
+      console.log(hours);
+      console.log(date);
+      console.log(time);
+  
     }
+    // Missing values, error
     else{
-
+      setOpenInfo(false);
+      setOpenError(true);
     }
-
-    console.log(hours);
-    console.log(date);
-    console.log(time);
-
 
     console.log("checked price");
   }
@@ -174,9 +185,9 @@ const App = () => {
           <p style={{ textAlign: 'center' }}><span style={{ fontWeight: 'bold' }}>Saturday - Sunday:</span> $150 per hour</p>
 
           <BookingContainer theme={theme}>
-            <StyledHoursInput hours={hours} setHours={setHours} error={hoursError} />
-            <StyledDateInput date={date} setDate={setDate} error={dateError}/>
-            <StyledTimeInput time={time} setTime={setTime} error={timeError}/>
+            <StyledHoursInput hours={hours} setHours={setHours} error={hoursError} setError={setHoursError} />
+            <StyledDateInput date={date} setDate={setDate} error={dateError} setError={setDateError}/>
+            <StyledTimeInput time={time} setTime={setTime} error={timeError} setError={setTimeError}/>
           </BookingContainer>
           
           <ButtonsContainer>
