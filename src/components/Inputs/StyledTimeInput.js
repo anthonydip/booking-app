@@ -1,13 +1,12 @@
 import { useContext } from 'react';
-import { DatePicker } from '@mantine/dates';
+import { TimeInput } from "@mantine/dates";
 import { ThemeContext } from '../Contexts/ThemeContext';
-import dayjs from 'dayjs';
 
-const StyledDateInput = ({ date, setDate, error }) => {
+const StyledTimeInput = ({ time, setTime, error }) => {
     const { currentTheme } = useContext(ThemeContext);
 
     return(
-        <DatePicker
+        <TimeInput 
             styles={{
                 root: {
                     width: '100%',
@@ -29,17 +28,15 @@ const StyledDateInput = ({ date, setDate, error }) => {
                 marginLeft: 'auto',
                 marginRight: 'auto',
             }}
-            allowLevelChange={false}
-            minDate={dayjs(new Date()).startOf('day').toDate()}
-            maxDate={dayjs(new Date()).endOf('year').toDate()}
+            value={time}
             error={error}
-            value={date}
-            onChange={setDate}
-            label='Date of Booking'
-            placeholder='Choose date'
+            onChange={setTime}
+            label='Time of Booking'
+            format='12'
             required
+            clearable
         />
-    )
+    );
 };
 
-export default StyledDateInput;
+export default StyledTimeInput;
