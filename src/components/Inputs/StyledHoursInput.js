@@ -49,7 +49,7 @@ const StyledHoursInput = ({ hours, setHours, error, setError }) => {
             placeholder='Hours'
             label='Hours for booking'
             min={0}
-            max={720}
+            max={336}
             required
           />
     );

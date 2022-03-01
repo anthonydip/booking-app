@@ -1,5 +1,6 @@
 import React, { useState, forwardRef } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
+import dayjs from 'dayjs';
 
 // Import components
 import Navbar from './components/Navbar/Navbar';
@@ -91,6 +92,8 @@ const App = () => {
   const [dateError, setDateError] = useState(false);
   const [timeError, setTimeError] = useState(false);
 
+  const [price, setPrice] = useState(0);
+
 
   // Light and dark theme state toggler
   const toggleTheme = () => {
@@ -120,7 +123,7 @@ const App = () => {
   const clear = () => {
     // Clear input states
     setHours();
-    setDate(null);
+    setDate();
     setTime();
 
     // Set input error and snackbar states
@@ -157,11 +160,29 @@ const App = () => {
       valid = false;
     }
 
-    // Calculate booking prices if valid
+    // Calculate booking prices
     if(valid){
-      console.log(hours);
-      console.log(date);
-      console.log(time);
+      var totalPrice = 0;
+
+      // Loop through from time of booking to hours booked
+      for(let i = 0; i < hours; i++){
+        let tempDT = dayjs(date).add(dayjs(time).hour(), 'hour').add(i, 'hour');
+
+        // If weekend, add weekend pricing
+        if(dayjs(tempDT).day() === 0 || dayjs(tempDT).day() === 6){
+          console.log("+ $150");
+          totalPrice += 150;
+        }
+        // If weekday, add weekday pricing
+        else{
+          console.log("+ $100");
+          totalPrice += 100;
+        }
+      }
+
+      console.log("START: " + dayjs(date).add(dayjs(time).hour(), 'hour').toDate())
+      console.log("END: " + dayjs(date).add(dayjs(time).hour(), 'hour').add(hours, 'hour').toDate());
+      console.log("TOTAL PRICE: " + totalPrice);
   
     }
     // Missing values, error
@@ -169,8 +190,6 @@ const App = () => {
       setOpenInfo(false);
       setOpenError(true);
     }
-
-    console.log("checked price");
   }
 
   return (
@@ -183,6 +202,7 @@ const App = () => {
 
           <p style={{ textAlign: 'center' }}> <span style={{ fontWeight: 'bold' }}>Monday - Friday:</span> $100 per hour</p>
           <p style={{ textAlign: 'center' }}><span style={{ fontWeight: 'bold' }}>Saturday - Sunday:</span> $150 per hour</p>
+          <p style={{ textAlign: 'center' }}>Maximum booking of two weeks (336 hours)</p>
 
           <BookingContainer theme={theme}>
             <StyledHoursInput hours={hours} setHours={setHours} error={hoursError} setError={setHoursError} />
