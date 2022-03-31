@@ -1,8 +1,6 @@
 # MoveMate Second Round Assignment: Junior Software Developer
 
-Anthony Dip  
-adip@uoguelph.ca  
-March 1, 2022  
+Basic booking web-application 
 
 ## Compiling and Running
 
